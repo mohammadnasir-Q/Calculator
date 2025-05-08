@@ -1,10 +1,11 @@
 import tkinter as tk
 from tkinter import messagebox
+import math
 
 def calculate(operation):
     try:
         num1 = float(entry1.get())
-        num2 = float(entry2.get())
+        num2 = float(entry2.get()) if entry2.get() else 0
 
         if operation == 'add':
             result.set(num1 + num2)
@@ -17,12 +18,19 @@ def calculate(operation):
                 messagebox.showerror("Error", "Cannot divide by zero")
                 return
             result.set(num1 / num2)
+        elif operation == 'square':
+            result.set(num1 ** 2)
+        elif operation == 'sqrt':
+            if num1 < 0:
+                messagebox.showerror("Error", "Cannot take square root of a negative number")
+                return
+            result.set(math.sqrt(num1))
     except ValueError:
         messagebox.showerror("Error", "Please enter valid numbers")
 
 root = tk.Tk()
 root.title("Beautiful Tkinter Calculator")
-root.geometry("350x300")
+root.geometry("350x360")
 root.config(bg="#f0f0f0")
 
 LABEL_FONT = ("Helvetica", 12)
@@ -55,6 +63,10 @@ tk.Button(button_frame, text="Multiply", font=BUTTON_FONT, bg="#FF9800", fg="whi
           command=lambda: calculate('multiply')).grid(row=1, column=0, padx=5, pady=5)
 tk.Button(button_frame, text="Divide", font=BUTTON_FONT, bg="#f44336", fg="white", width=10,
           command=lambda: calculate('divide')).grid(row=1, column=1, padx=5, pady=5)
+tk.Button(button_frame, text="Square", font=BUTTON_FONT, bg="#9C27B0", fg="white", width=10,
+          command=lambda: calculate('square')).grid(row=2, column=0, padx=5, pady=5)
+tk.Button(button_frame, text="√", font=BUTTON_FONT, bg="#00BCD4", fg="white", width=10,
+          command=lambda: calculate('sqrt')).grid(row=2, column=1, padx=5, pady=5)
 
 tk.Label(root, text="Result:", font=LABEL_FONT, bg="#f0f0f0").pack()
 tk.Entry(root, textvariable=result, font=ENTRY_FONT, state='readonly', justify='center', width=20).pack(pady=5)
